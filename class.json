@@ -1,35 +1,71 @@
 {
-    "class": "Bx334",
-    "schedule": {
-      "Monday": [
-        { "time": "9:00 - 11:00", "module": "Programming" },
-        { "time": "11:20 - 13:20", "module": "Networking" },
-        { "time": "14:00 - 16:00", "module": "Software" }
-      ],
-      "Tuesday": [
-        { "time": "9:00 - 11:00", "module": "Mathematics" },
-        { "time": "11:20 - 13:20", "module": "Physics" },
-        { "time": "14:00 - 16:00", "module": "Chemistry" }
-      ],
-      "Wednesday": [
-        { "time": "9:00 - 11:00", "module": "Biology" },
-        { "time": "11:20 - 13:20", "module": "Geography" },
-        { "time": "14:00 - 16:00", "module": "History" }
-      ],
-      "Thursday": [
-        { "time": "9:00 - 11:00", "module": "English" },
-        { "time": "11:20 - 13:20", "module": "Art" },
-        { "time": "14:00 - 16:00", "module": "Music" }
-      ],
-      "Friday": [
-        { "time": "9:00 - 11:00", "module": "Physical Education" },
-        { "time": "11:20 - 13:20", "module": "Computer Science" },
-        { "time": "14:00 - 16:00", "module": "Economics" }
-      ],
-      "Saturday": [
-        { "time": "9:00 - 11:00", "module": "Physical Education" },
-        { "time": "11:20 - 13:20", "module": "Computer Science" },
-        { "time": "16:00 - 19:00", "module": "Fifa" }
-      ]
+  "classes": [
+    {
+      "class": "Bx334",
+      "schedule": {
+        "Monday": [
+          { "time": "9:00 - 11:00", "module": "Programming" },
+          { "time": "11:20 - 13:20", "module": "Networking" },
+          { "time": "14:00 - 16:00", "module": "Software" }
+        ],
+        "Tuesday": [
+          { "time": "9:00 - 11:00", "module": "Mathematics" },
+          { "time": "11:20 - 13:20", "module": "Games" },
+          { "time": "14:00 - 16:00", "module": "Operating Systems" }
+        ],
+        "Wednesday": [
+          { "time": "9:00 - 11:00", "module": "Project" },
+          { "time": "11:20 - 13:20", "module": "Work Experience" },
+          { "time": "14:00 - 16:00", "module": "Communications" }
+        ],
+        "Thursday": [
+          { "time": "9:00 - 11:00", "module": "Object Oriented" },
+          { "time": "11:20 - 13:20", "module": "Art" },
+          { "time": "14:00 - 16:00", "module": "Music" }
+        ],
+        "Friday": [
+          { "time": "9:00 - 11:00", "module": "Physical Education" },
+          { "time": "11:20 - 13:20", "module": "Computer Science" },
+          { "time": "14:00 - 16:00", "module": "Economics" }
+        ],
+        "Sunday": [
+          { "time": "9:00 - 11:00", "module": "Physical Education" },
+          { "time": "11:20 - 13:20", "module": "Computer Science" },
+          { "time": "14:20 - 16:00", "module": "Computer Science" },
+          { "time": "16:00 - 19:00", "module": "Fifa" }
+        ]
+      }
+    },
+    {
+      "class": "Software1",
+      "schedule": {
+        "Monday": [
+          { "time": "9:00 - 11:00", "module": "Physics" },
+          { "time": "11:20 - 13:20", "module": "Chemistry" },
+          { "time": "14:00 - 16:00", "module": "Biology" }
+        ],
+        "Tuesday": [
+          { "time": "9:00 - 11:00", "module": "History" },
+          { "time": "11:20 - 13:20", "module": "Geography" },
+          { "time": "14:00 - 16:00", "module": "English" }
+        ],
+        "Wednesday": [
+          { "time": "9:00 - 11:00", "module": "French" },
+          { "time": "11:20 - 13:20", "module": "Spanish" },
+          { "time": "14:00 - 16:00", "module": "German" }
+        ],
+        "Thursday": [
+          { "time": "9:00 - 11:00", "module": "Literature" },
+          { "time": "11:20 - 13:20", "module": "Philosophy" },
+          { "time": "14:00 - 16:00", "module": "Psychology" }
+        ],
+        "Sunday": [
+          { "time": "9:00 - 11:00", "module": "Sociology" },
+          { "time": "11:20 - 13:20", "module": "Anthropology" },
+          { "time": "14:00 - 16:00", "module": "Political Science" },
+          { "time": "16:00 - 19:00", "module": "Mobile Technologies" }
+        ]
+      }
     }
-  }
+  ]
+}

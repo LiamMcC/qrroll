@@ -1,134 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Scanner</title>
-  <style>
-    #video-container {
-      position: relative;
-      width: 100%;
-      max-width: 640px; /* Adjust as needed */
-    }
-    #video-feed {
-      width: 100%;
-      height: auto;
-    }
-    #qr-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-    }
-    header {
-      background-color: #ffffff;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-family: 'Roboto', sans-serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: #333333;
-    }
-    nav ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-    }
-    nav ul li {
-      margin-right: 20px;
-    }
-    .container {
-      background-color: #ffffff;
-      padding: 40px;
-      text-align: center;
-    }
-    .container h1 {
-      margin-bottom: 20px;
-      font-size: 32px;
-      color: #333333;
-    }
-    .container p {
-      color: #666666;
-    }
-    .container img {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      margin-top: 20px;
-    }
-    footer {
-      background-color: #333333;
-      color: #ffffff;
-      padding: 40px;
-      text-align: center;
-    }
-    footer ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-    }
-    footer ul li {
-      margin-right: 20px;
-    }
-    .large-text {
-      font-size: 24px;
-      font-weight: 700;
-      margin-top: 20px;
-    }
-
-    .centered-video {
-      width: 400px; /* Adjust width as needed */
-      margin: 0 auto; /* Center horizontally */
-      text-align: center;
-      border-radius: 10px; /* Rounded corners */
-      border: 1px solid #333; /* Border */
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .centered-video header {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .centered-video p {
-      font-size: 16px;
-      color: #666;
-    }
-    .centered-video video {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 8px; /* Rounded corners for video */
-    }
-  </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">Education Hub</div>
-        <nav>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Courses</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+<%- include('../partials/header') -%>
 
       <div class="container">
         <h1>Welcome to Education Hub</h1>
@@ -193,13 +63,14 @@
       // Display decoded QR code result
       if (code && !qrDataSent) {
         const qrData = JSON.parse(code.data); // Parse JSON data
-  const name = qrData.name; // Extract name from parsed data
+  const name = qrData.fname; // Extract name from parsed data
+  const sname = qrData.sname; // Extract name from parsed data
         qrResultElement.innerText = 'QR Code Detected: ' + name;
         qrDataSent = true; // Update flag to indicate data has been sent
         
 
         swal({
-        title: 'Thanks ' + name,
+        title: 'Thanks ' + name + " " + sname,
         text: 'QR Code Detected',
         icon: 'success',
         timer: 2000, // Close after 2 seconds

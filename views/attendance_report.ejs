@@ -1,0 +1,30 @@
+<%- include('../partials/header') -%>
+<body>
+
+    <div class="container">
+    <h1>Attendance Report - <%= moduleName %></h1>
+    <h1>No Of Classes So Far - <%= totalUniqueDates %></h1>
+    
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Days Occurred</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% attendanceReport.forEach(student => { %>
+                <tr>
+                    <td><%= student.fname %> <%= student.sname %></td>
+                    <td><%= student.daysOccurred %></td>
+                    <td><%= student.percentage.toFixed(2) %>%</td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    </div>
+</body>
+</html>

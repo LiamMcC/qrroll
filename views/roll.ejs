@@ -1,0 +1,66 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+       
+      
+
+    <h1>Student Scan Data</h1> 
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student No</th>
+                <th>Class</th>
+                <th>Student</th>
+                <th>Day</th>
+                <th>Module</th>
+                
+                <th>Scanned At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% result.forEach(item => { %>
+                <tr>
+                    <td><%= item.id %></td>
+                    <td><%= item.studentNo %></td>
+                    <td><%= item.class %></td>
+                    <td><%= item.student %></td>
+                    <td><%= item.cDay %></td>
+                    <td><%= item.module %></td>
+                    <td><%= item.scanned_at %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+
+
+</div>
+
+
+<div class="rcontainer">
+    <div class="flex-item">
+      <div class="rheader">Module % Attendance</div>
+      <div class="icon"><i class="fa fa-address-book-o"></i></div>
+      <a href="/attendance_report" class="button">See It</a>
+      
+    </div>
+    <div class="flex-item">
+      <div class="rheader">Roll By Module</div>
+      <div class="icon"><i class="fa fa-folder"></i></div>
+      <a href="/attendance_grid" class="button">See It</a>
+
+    </div>
+
+    <div class="flex-item">
+        <div class="rheader">Roll By Class</div>
+        <div class="icon"><i class="fa fa-clone"></i></div>
+        <button class="button">View</button>
+      </div>
+    <!-- Add more flex-items as needed -->
+  </div>
+  
+
+
+<%- include('../partials/footer') -%>
+</body>
+</html>
