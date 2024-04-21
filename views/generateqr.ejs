@@ -1,0 +1,39 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+             
+
+    <h1>Generate One QR Code</h1> 
+        
+
+</div>
+
+
+<div class="rcontainer">
+    <div class="flex-item" style="width:90%;">
+      
+        <form action="/generateqr" method="post" style="width:90%;">
+            <div class="form-group">
+                <input type="text" name="fname" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <input type="text" name="sname" placeholder="Surname">
+            </div>
+            <div class="form-group">
+                <input type="text" name="class" placeholder="Class">
+            </div>
+            <div class="form-group">
+                <input type="text" name="studentno" placeholder="Student Number">
+            </div>
+            <input type="submit" value="Make It!" class="button">
+        </form>
+    </div>
+   
+  </div>
+  
+
+
+  
+
+<%- include('../partials/footer') -%>
+</body>
+</html>

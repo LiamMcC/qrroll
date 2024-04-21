@@ -1,0 +1,31 @@
+<%- include('../partials/header') -%>
+
+<!-- classgroups.ejs -->
+<h1>Modules for Class <%= className %></h1>
+
+
+    <div class="rcontainer">
+        
+        <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+        <% daysOfWeek.forEach(day => { %>
+            <div class="flex-item">
+                <h2><%= day %></h2>
+              
+                    <% schedule.filter(item => item.dayOfWeek === day).forEach(item => { %>
+                        <a href="/attendance_grid/<%= className %>/<%= item.moduleName %>"><%= item.module %> <%= item.moduleName %></a></br>
+                    <% }); %>
+               
+            </div>
+        <% }); %>
+   
+  
+   
+   
+ 
+
+</div>
+
+
+
+
+<%- include('../partials/footer') -%>

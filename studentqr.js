@@ -3,14 +3,14 @@ const fs = require('fs');
 
 const studentInfo = {
   student_number: 1235555,
-  fname: 'Will',
+  fname: 'Richard',
   sname: 'Willson',
-  class: 'Software1'
+  class: 'Animation'
 };
 
 const qrData = JSON.stringify(studentInfo);
 
-qr.toFile('willy.png', qrData, (err) => {
+qr.toFile('richard.png', qrData, (err) => {
   if (err) throw err;
   console.log('QR code generated successfully!');
 });

@@ -36,29 +36,84 @@
 
 </div>
 
-
 <div class="rcontainer">
+  <div class="flex-item">
+    <div class="rheader">Module Attendance Grids</div>
+    <p style="width:80%;">All modules for Each group listed. Clicking on the module name will display in grid format each student marked in or out per module.</p>
+    <div class="icon"><i class="fa fa-address-book-o"></i></div>
+    <a href="/classgroups" class="button">See It</a>
+    
+  </div>
+  <div class="flex-item">
+    <div class="rheader">Student % Attendance Module</div>
+    <p style="width:80%;">All modules for Each group listed. Clicking on the module name will display in table format each student feaction and & in or out per module.</p>
+    <div class="icon"><i class="fa fa-folder"></i></div>
+    <a href="/groupmodules" class="button">See It</a>
+
+  </div>
+
+  <div class="flex-item">
+      <div class="rheader">Generate Code</div>
+      <p style="width:80%;">Clicking here will allow you to generate a singel qr code for a single student. These can be seen in the all codes page.</p>
+      <div class="icon"><i class="fa fa-clone"></i></div>
+      <a href="/generateqr" class="button">See It</a>
+    </div>
+  <!-- Add more flex-items as needed -->
+</div>
+
+
+
+  
+
+
+  <div class="rcontainer">
     <div class="flex-item">
-      <div class="rheader">Module % Attendance</div>
+      <div class="rheader">Manual Attendance</div>
       <div class="icon"><i class="fa fa-address-book-o"></i></div>
-      <a href="/attendance_report" class="button">See It</a>
+      <a href="/manualattendance" class="button">See It</a>
       
     </div>
+
     <div class="flex-item">
-      <div class="rheader">Roll By Module</div>
+      <div class="rheader">Overall Attendance Student</div>
       <div class="icon"><i class="fa fa-folder"></i></div>
-      <a href="/attendance_grid" class="button">See It</a>
+      <a href="/classgroupsoverall" class="button">See It</a>
+      
 
     </div>
 
     <div class="flex-item">
-        <div class="rheader">Roll By Class</div>
+        <div class="rheader">Attendince Grid (Module)</div>
         <div class="icon"><i class="fa fa-clone"></i></div>
-        <button class="button">View</button>
+        <a href="/classgroups" class="button">See It</a>
       </div>
     <!-- Add more flex-items as needed -->
   </div>
-  
+
+
+  <div class="rcontainer">
+    <div class="flex-item">
+      <div class="rheader">Generate QR Code (Single)</div>
+      <div class="icon"><i class="fa fa-address-book-o"></i></div>
+      <a href="/generateqr" class="button">See It</a>
+      
+    </div>
+    <div class="flex-item">
+      <div class="rheader">Generate QR Code (Multiple)</div>
+      <div class="icon"><i class="fa fa-address-book-o"></i></div>
+      <a href="/generatemultipleqr" class="button">See It</a>
+
+    </div>
+
+    <div class="flex-item">
+        <div class="rheader">Generate Code</div>
+        <div class="icon"><i class="fa fa-clone"></i></div>
+        <a href="/generateqr" class="button">See It</a>
+      </div>
+    <!-- Add more flex-items as needed -->
+  </div>
+
+
 
 
 <%- include('../partials/footer') -%>

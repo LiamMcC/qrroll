@@ -1,0 +1,30 @@
+
+<%- include('../partials/header') -%>
+<div class="container">
+ 
+
+
+<h1>All QR Codes</h1> 
+
+<a href="/sendallcodes" class="button">Send Them All</a>
+</div>
+
+
+<div class="rcontainer">
+
+    
+<% result.forEach(item => { %>
+    <div class="flex-item">
+    <h2><%= item.class %></h2>
+    <a href="/classattendance/<%= item.class %>" class="button">See Students</a>
+</div>
+    <% }); %>
+    
+
+</div>
+
+<%- include('../partials/footer') -%>
+</body>
+</html>
+
+   

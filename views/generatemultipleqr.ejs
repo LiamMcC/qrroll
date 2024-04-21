@@ -1,0 +1,30 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+             
+
+    <h1>Generate One QR Code</h1> 
+        
+
+</div>
+
+
+<div class="rcontainer">
+    <div class="flex-item" style="width:90%;">
+      
+        
+            <h1>Upload CSV File</h1>
+    <form action="/generatemultipleqr" method="post" style="width:90%;"" enctype="multipart/form-data">
+        <input type="file" name="csvFile" accept=".csv">
+        <button type="submit">Upload</button>
+    </form>
+    </div>
+   
+  </div>
+  
+
+
+  
+
+<%- include('../partials/footer') -%>
+</body>
+</html>

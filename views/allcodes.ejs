@@ -1,0 +1,78 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+       
+      
+
+    <h1>All QR Codes</h1> 
+   
+    <a href="/sendallcodes" class="button">Send Them All</a>
+</div>
+
+
+<div class="rcontainer">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student No</th>
+                <th>Class</th>
+                <th>First Name</th>
+                <th>Surname</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% result.forEach(item => { %>
+                <tr>
+                    <td><%= item.id %></td>
+                    <td><span onclick="showAlert('<%= item.codename %>')"><%= item.studentNo %> <i class="fa fa-qrcode"></i></span></td>
+                    <td><%= item.class %></td>
+                    <td><%= item.fname %></td>
+                    <td><%= item.sname %></td>
+              
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+  </div>
+
+
+  <div class="rcontainer">
+    <% result.forEach(item => { %>
+    <div class="flex-item">
+      <div class="rheader"><%= item.codename %></div>
+      <img src="<%= item.codename %>">
+     <p><%= item.sname %></p>
+
+      
+    </div>
+
+    <% }); %>
+   
+  </div>
+  
+
+  <script>
+    // Function to display SweetAlert with image
+    function showAlert(item) {
+      const imageUrl = `<img src="${item}">`;
+      swal({
+        title: 'Student Image',
+        content: {
+          element: 'div',
+          attributes: {
+            innerHTML: imageUrl
+          }
+        },
+        buttons: {
+          close: true
+        }
+      });
+    }
+  </script>
+  
+
+<%- include('../partials/footer') -%>
+</body>
+</html>

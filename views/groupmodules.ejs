@@ -1,0 +1,33 @@
+<%- include('../partials/header') -%>
+<body>
+
+    <div class="container">
+    <h1>Class Groups</h1>
+    <p>Pick A group Below To See All Modules for that group. You can then view atendance by module.</p>
+
+
+    <div class="rcontainer">
+
+  
+        <% results.forEach(className => { %>
+          <div class="flex-item">
+            <div class="rheader"> <%= className.class %></div>
+        <div class="icon"><i class="fa fa-folder"></i></div>
+        <a href="/individualgroupmodules/<%= className.class %>" class="button">See It</a>
+         
+        </div>
+        <% }); %>
+      
+    
+      
+        
+      </div>
+
+
+
+
+
+
+    </div>
+</body>
+</html>

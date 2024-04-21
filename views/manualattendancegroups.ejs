@@ -1,0 +1,31 @@
+
+<%- include('../partials/header') -%>
+<div class="container">
+ 
+
+
+<h1>Manually Alter Attendance</h1> 
+<p>Select The Group You Want To Manually Alter Attendance For</p>
+
+
+</div>
+
+
+<div class="rcontainer">
+
+    
+<% result.forEach(item => { %>
+    <div class="flex-item">
+    <h2><%= item.class %></h2>
+    <a href="/manualattendancemodules/<%= item.class %>" class="button">See Students</a>
+</div>
+    <% }); %>
+    
+
+</div>
+
+<%- include('../partials/footer') -%>
+</body>
+</html>
+
+   

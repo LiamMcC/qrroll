@@ -1,0 +1,35 @@
+<%- include('../partials/header') -%>
+<body>
+
+    <div class="container">
+    <h1>Attendance Grid! <%= classParam %> <%= moduleParam %> </h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <% dates.forEach(date => { %>
+                    <th><%= date.date.toDateString() %></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% students.forEach(student => { %>
+                <tr>
+                    <td><%= student.fullName %></td>
+                    <% dates.forEach(date => { %>
+                        <td>
+                            <% if (attendanceMap[student.fullName][date.date]) { %>
+                                <i class="fa fa-check-square" style="color:green"></i>
+                            <% } else { %>
+                                <i class="fa fa-minus-square" style="color:red"></i>
+                            <% } %>
+                        </td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

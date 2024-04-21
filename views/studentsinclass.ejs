@@ -1,0 +1,33 @@
+
+<%- include('../partials/header') -%>
+<div class="container">
+ 
+
+
+<h1>All Students In Class</h1> 
+
+<a href="/sendallcodes" class="button">Send Them All</a>
+</div>
+
+
+<div class="rcontainer">
+
+    
+<% result.forEach(item => { %>
+    <div class="flex-item">
+    <h2><%= item.fullname %></h2>
+    
+    <p>Class: <%= item.class %></p>
+    <p>Student Number: <%= item.studentNo %></p>
+    <a href="/overallattendance/<%= item.class %>/<%= item.studentNo %>">Click For Attendance</a>
+</div>
+    <% }); %>
+    
+
+</div>
+
+<%- include('../partials/footer') -%>
+</body>
+</html>
+
+   

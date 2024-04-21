@@ -4,35 +4,29 @@
       "class": "Bx334",
       "schedule": {
         "Monday": [
-          { "time": "9:00 - 11:00", "module": "Programming" },
-          { "time": "11:20 - 13:20", "module": "Networking" },
-          { "time": "14:00 - 16:00", "module": "Software" }
+          { "id" : 1, "time": "9:00 - 11:00", "module": "Programming" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Networking" },
+          { "id" : 3, "time": "14:00 - 16:00", "module": "Software" }
         ],
         "Tuesday": [
-          { "time": "9:00 - 11:00", "module": "Mathematics" },
-          { "time": "11:20 - 13:20", "module": "Games" },
-          { "time": "14:00 - 16:00", "module": "Operating Systems" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Mathematics" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Games" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Operating Systems" }
         ],
         "Wednesday": [
-          { "time": "9:00 - 11:00", "module": "Project" },
-          { "time": "11:20 - 13:20", "module": "Work Experience" },
-          { "time": "14:00 - 16:00", "module": "Communications" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Project" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Work Experience" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Communications" }
         ],
         "Thursday": [
-          { "time": "9:00 - 11:00", "module": "Object Oriented" },
-          { "time": "11:20 - 13:20", "module": "Art" },
-          { "time": "14:00 - 16:00", "module": "Music" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Object Oriented" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Art" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Music" }
         ],
         "Friday": [
-          { "time": "9:00 - 11:00", "module": "Physical Education" },
-          { "time": "11:20 - 13:20", "module": "Computer Science" },
-          { "time": "14:00 - 16:00", "module": "Economics" }
-        ],
-        "Sunday": [
-          { "time": "9:00 - 11:00", "module": "Physical Education" },
-          { "time": "11:20 - 13:20", "module": "Computer Science" },
-          { "time": "14:20 - 16:00", "module": "Computer Science" },
-          { "time": "16:00 - 19:00", "module": "Fifa" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Physical Education" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Computer Science" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Economics" }
         ]
       }
     },
@@ -40,30 +34,24 @@
       "class": "Software1",
       "schedule": {
         "Monday": [
-          { "time": "9:00 - 11:00", "module": "Physics" },
-          { "time": "11:20 - 13:20", "module": "Chemistry" },
-          { "time": "14:00 - 16:00", "module": "Biology" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Software" },
+          {"id" : 2, "time": "11:01 - 13:20", "module": "Chemistry" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Biology" }
         ],
         "Tuesday": [
-          { "time": "9:00 - 11:00", "module": "History" },
-          { "time": "11:20 - 13:20", "module": "Geography" },
-          { "time": "14:00 - 16:00", "module": "English" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "History" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Geography" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "English" }
         ],
         "Wednesday": [
-          { "time": "9:00 - 11:00", "module": "French" },
-          { "time": "11:20 - 13:20", "module": "Spanish" },
-          { "time": "14:00 - 16:00", "module": "German" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "French" },
+          {"id" : 2, "time": "11:01 - 13:20", "module": "Spanish" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "German" }
         ],
         "Thursday": [
-          { "time": "9:00 - 11:00", "module": "Literature" },
-          { "time": "11:20 - 13:20", "module": "Philosophy" },
-          { "time": "14:00 - 16:00", "module": "Psychology" }
-        ],
-        "Sunday": [
-          { "time": "9:00 - 11:00", "module": "Sociology" },
-          { "time": "11:20 - 13:20", "module": "Anthropology" },
-          { "time": "14:00 - 16:00", "module": "Political Science" },
-          { "time": "16:00 - 19:00", "module": "Mobile Technologies" }
+          {"id" : 1, "time": "9:00 - 11:00", "module": "Literature" },
+          {"id" : 2, "time": "11:20 - 13:20", "module": "Philosophy" },
+          {"id" : 3, "time": "14:00 - 16:00", "module": "Psychology" }
         ]
       }
     }

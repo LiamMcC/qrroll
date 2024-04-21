@@ -1,0 +1,46 @@
+
+
+
+<%- include('../partials/header') -%>
+<div class="rcontainer" style="margin-top:15px;">
+<!-- classgroups.ejs -->
+<h1><%= result[0].fname %> <%= result[0].sname %></h1>
+<h2>Student No. <%= result[0].studentNo %></h2>
+<h2><%= result[0].class %></h2>
+</div>
+
+
+    <div class="rcontainer">
+        <h2>So far this year there have been a total of <%= totalResult[0].total_unique_dates %> classes for <%= result[0].class %> <br><br><br>
+                        Of these <%= totalResult[0].total_unique_dates %> <%= result[0].fname %> <%= result[0].sname %> attended <%= result[0].days_occurred %></h2>
+               
+                        
+   </div>
+
+   <div class="rcontainer">
+                    <div class="flex-item">
+                        <h2>Days Attended A/B</h2>
+                        <p><%= result[0].days_occurred %>/<%= totalResult[0].total_unique_dates %></p>
+                    </div>    
+
+                    <div class="flex-item">
+                        <h2>% Attendence</h2>
+                            <% var totalUniqueDates = totalResult[0].total_unique_dates; %>
+                            <% var daysOccurred = result[0].days_occurred; %>
+                            <% var percentage = (daysOccurred / totalUniqueDates) * 100; %>
+                            <p><%= percentage %> %</p>
+                    </div> 
+
+                    <div class="flex-item">
+                        <h2>% Absence</h2>
+                        <% var missed = totalResult[0].total_unique_dates - result[0].days_occurred; %>
+                            <% var totalUniqueDates = totalResult[0].total_unique_dates; %>
+                            <% var daysOccurred = result[0].days_occurred; %>
+                            <% var percentageout = (missed / totalUniqueDates) * 100; %>
+                            <p><%= percentageout %> %</p>
+                    </div> 
+ 
+</div>
+
+
+<%- include('../partials/footer') -%>

@@ -107,7 +107,7 @@ const currentTime = getCurrentTime();
 
     // Function to send data to the server
     function sendDataToServer(data, currentTime) {
-      fetch('/qrdata', {
+      fetch('/qrdatadb', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

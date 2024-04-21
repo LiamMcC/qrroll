@@ -1,0 +1,85 @@
+<%- include('../partials/header') -%>
+<body>
+
+    <div class="container">
+    <h1>Manual Attendance For <br><%= theGroup %>: <%= theModule %></h1>
+   
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <% dates.forEach(date => { %>
+                    <th><%= date.date.toDateString() %></th>
+                <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <% students.forEach(student => { %>
+                <tr>
+                    <td><%= student.fullName %> (<%= student.studentNo %>)</td>
+                    <% dates.forEach(date => { %>
+                        <td>
+                            <% if (attendanceMap[student.fullName][date.date]) { %>
+                                <i class="fa fa-check-square" style="color:green"></i>
+                            <% } else { %>
+                                <i class="fa fa-minus-square" style="color:red" onclick="changeAttendance('<%= student.fullName %>', '<%= date.date %>', '<%= student.studentNo %>', '<%= theGroup %>', '<%= theModule %>')"></i>
+                            <% } %>
+                        </td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    </div>
+
+    <script>
+ 
+        function changeAttendance(studentName, date, studentNo, tehclass, module ) {
+            const gdate = new Date(date);
+const options = { weekday: 'long' };
+const dayName = gdate.toLocaleDateString('en-US', options);
+
+            swal({
+                title: "Change Attendance",
+                text: `Change the attendance of ${studentName} in ${tehclass} attending ${module} for ${date}?`,
+                icon: "warning",
+                buttons: ["Cancel", "Confirm"],
+                dangerMode: true,
+            })
+            .then((confirm) => {
+                if (confirm) {
+                    // Perform AJAX POST request to the server to change attendance
+                    $.ajax({
+                        type: "POST",
+                        url: "/changeAttendance/" + studentNo,
+                        data: { 
+                            studentName: studentName, 
+                            date: date,
+                            studentNo: studentNo,
+                            tehclass: tehclass,
+                            module: module,
+                            dayName: dayName,
+                            studentName: studentName
+                        },
+                        success: function(response) {
+                            swal("Attendance changed successfully!", {
+                                icon: "success",
+                            });
+    
+                            // Refresh the page after 3 seconds
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                        },
+                        error: function(xhr, status, error) {
+                            swal("Error", "Failed to change attendance", "error");
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+    
+</body>
+</html>
