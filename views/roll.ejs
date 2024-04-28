@@ -1,40 +1,9 @@
 <%- include('../partials/header') -%>
       <div class="container">
        
-      
-
-    <h1>Student Scan Data</h1> 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Student No</th>
-                <th>Class</th>
-                <th>Student</th>
-                <th>Day</th>
-                <th>Module</th>
-                
-                <th>Scanned At</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% result.forEach(item => { %>
-                <tr>
-                    <td><%= item.id %></td>
-                    <td><%= item.studentNo %></td>
-                    <td><%= item.class %></td>
-                    <td><%= item.student %></td>
-                    <td><%= item.cDay %></td>
-                    <td><%= item.module %></td>
-                    <td><%= item.scanned_at %></td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-
-
-
-</div>
+            <h1>Roll & Attendance Menu</h1>
+            <p>Below are a list of things that you can use to get attendace recors for students</p>
+            
 
 <div class="rcontainer">
   <div class="flex-item">
@@ -52,15 +21,9 @@
 
   </div>
 
-  <div class="flex-item">
-      <div class="rheader">Generate Code</div>
-      <p style="width:80%;">Clicking here will allow you to generate a singel qr code for a single student. These can be seen in the all codes page.</p>
-      <div class="icon"><i class="fa fa-clone"></i></div>
-      <a href="/generateqr" class="button">See It</a>
-    </div>
+ 
   <!-- Add more flex-items as needed -->
 </div>
-
 
 
   
@@ -69,6 +32,8 @@
   <div class="rcontainer">
     <div class="flex-item">
       <div class="rheader">Manual Attendance</div>
+      <p style="width:80%;">Clicking here will allow you to generate See a list of all classes. By Picking the class you want you will then be presented with a list of modules
+      Select the module you want and from there you can manually change attendance.</p>
       <div class="icon"><i class="fa fa-address-book-o"></i></div>
       <a href="/manualattendance" class="button">See It</a>
       
@@ -76,42 +41,21 @@
 
     <div class="flex-item">
       <div class="rheader">Overall Attendance Student</div>
+      <p style="width:80%;">Clicking here will allow you to generate See a list of all classes. By Picking the class you want you will then be presented with a list of all students
+        By selecting the student name you want to see you can see the course attendance for that student so far.</p>
       <div class="icon"><i class="fa fa-folder"></i></div>
       <a href="/classgroupsoverall" class="button">See It</a>
       
 
     </div>
 
-    <div class="flex-item">
-        <div class="rheader">Attendince Grid (Module)</div>
-        <div class="icon"><i class="fa fa-clone"></i></div>
-        <a href="/classgroups" class="button">See It</a>
-      </div>
+
     <!-- Add more flex-items as needed -->
   </div>
 
 
-  <div class="rcontainer">
-    <div class="flex-item">
-      <div class="rheader">Generate QR Code (Single)</div>
-      <div class="icon"><i class="fa fa-address-book-o"></i></div>
-      <a href="/generateqr" class="button">See It</a>
-      
-    </div>
-    <div class="flex-item">
-      <div class="rheader">Generate QR Code (Multiple)</div>
-      <div class="icon"><i class="fa fa-address-book-o"></i></div>
-      <a href="/generatemultipleqr" class="button">See It</a>
 
-    </div>
-
-    <div class="flex-item">
-        <div class="rheader">Generate Code</div>
-        <div class="icon"><i class="fa fa-clone"></i></div>
-        <a href="/generateqr" class="button">See It</a>
-      </div>
-    <!-- Add more flex-items as needed -->
-  </div>
+</div>
 
 
 

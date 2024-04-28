@@ -1,29 +1,37 @@
 <%- include('../partials/header') -%>
 
       <div class="container">
-        <h1>Welcome to Education Hub</h1>
+        <h1>Welcome to Attendance Hub</h1>
         <p>Keep Track of students as they attend class.</p>
        
+        <div class="rcontainer">
+          <div class="flex-item">
+            <h2>Scan Your Code Please!</h2>
+            <p>Use the QR Code provided to you by the college to scan here for your attendance.
+            </p>  
+            <p>Position the QR Code on front of the camera. If you see a thank you message you know the attendace has been recorded. </p>
+            <p id="qr-result">Content of QR Code.</p>
+          </div>
+
+          <div class="flex-item">
+            <div class="centered-video">
+             
+              <div id="video-container">
+                  <video id="video-feed" autoplay playsinline></video>
+                  <canvas id="qr-overlay"></canvas>
+                </div>
+            </div>
+
+          </div>
+        </div>   
+
+
+
       </div>
       
 
-      <div class="centered-video">
-        <header>Scan Your Code Please!</header>
-        <p id="qr-result">This is a paragraph describing the video content.</p>
-        <div id="video-container">
-            <video id="video-feed" autoplay playsinline></video>
-            <canvas id="qr-overlay"></canvas>
-          </div>
-      </div>
-      <footer>
-        <ul>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Contact Us</a></li>
-        </ul>
-        <div class="large-text">Join us and start your journey to success!</div>
-      </footer>
+
+   
 
  
   <audio id="scan-sound" src="./scanbeep.wav"></audio>
@@ -94,7 +102,7 @@ const currentTime = getCurrentTime();
           sendDataToServer(code.data, currentTime); // Send data to server
         }, 1000); // Adjust delay as needed
       } else if (!code) {
-        qrResultElement.innerText = 'No QR Code detected.';
+        qrResultElement.innerText = 'No QR Code detected Yet.';
         qrDataSent = false; // Reset flag if no QR code detected
       }
 
@@ -133,5 +141,7 @@ const currentTime = getCurrentTime();
       scanSound.play();
     }
   </script>
+
+<%- include('../partials/footer') -%>
 </body>
 </html>

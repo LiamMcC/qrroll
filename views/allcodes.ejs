@@ -1,12 +1,15 @@
 <%- include('../partials/header') -%>
       <div class="container">
-       
+
+    <h1>All QR Codes For all students</h1> 
+    <p>Click on the students name to see the QR Code for that sutdent. You can send the entire list of QR Codes by pressint the send them button.
+      <br>This will send all codes to all students uploaded through a CSV file
       
 
-    <h1>All QR Codes</h1> 
+    </p>
+    
    
-    <a href="/sendallcodes" class="button">Send Them All</a>
-</div>
+
 
 
 <div class="rcontainer">
@@ -36,29 +39,19 @@
     </table>
 
   </div>
-
-
-  <div class="rcontainer">
-    <% result.forEach(item => { %>
-    <div class="flex-item">
-      <div class="rheader"><%= item.codename %></div>
-      <img src="<%= item.codename %>">
-     <p><%= item.sname %></p>
-
-      
-    </div>
-
-    <% }); %>
-   
-  </div>
+  <br>
+  <br>
+  <a href="/sendallcodes" class="button" style="background-color:black;">Send Them All</a>
   
+
+
 
   <script>
     // Function to display SweetAlert with image
     function showAlert(item) {
       const imageUrl = `<img src="${item}">`;
       swal({
-        title: 'Student Image',
+        title: 'Student QR Code Image',
         content: {
           element: 'div',
           attributes: {
@@ -72,7 +65,7 @@
     }
   </script>
   
-
+</div>
 <%- include('../partials/footer') -%>
 </body>
 </html>

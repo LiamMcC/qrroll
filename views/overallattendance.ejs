@@ -2,17 +2,18 @@
 
 
 <%- include('../partials/header') -%>
+<div class="container">
 <div class="rcontainer" style="margin-top:15px;">
 <!-- classgroups.ejs -->
-<h1><%= result[0].fname %> <%= result[0].sname %></h1>
+<h1 style="color:black;"><%= result[0].fname %> <%= result[0].sname %></h1>
 <h2>Student No. <%= result[0].studentNo %></h2>
 <h2><%= result[0].class %></h2>
 </div>
 
 
     <div class="rcontainer">
-        <h2>So far this year there have been a total of <%= totalResult[0].total_unique_dates %> classes for <%= result[0].class %> <br><br><br>
-                        Of these <%= totalResult[0].total_unique_dates %> <%= result[0].fname %> <%= result[0].sname %> attended <%= result[0].days_occurred %></h2>
+        <p style="color:black;">So far this year there has been a total of <%= totalResult[0].total_unique_dates %> classes for <%= result[0].class %> <br>
+                        Of these <%= totalResult[0].total_unique_dates %> <%= result[0].fname %> <%= result[0].sname %> attended <%= result[0].days_occurred %></p>
                
                         
    </div>
@@ -28,7 +29,12 @@
                             <% var totalUniqueDates = totalResult[0].total_unique_dates; %>
                             <% var daysOccurred = result[0].days_occurred; %>
                             <% var percentage = (daysOccurred / totalUniqueDates) * 100; %>
-                            <p><%= percentage %> %</p>
+                            <% if (percentage < 50) { %>
+                                <p style="color: red;"><%= percentage.toFixed(2) %> %</p>
+                            <% } else { %>
+                                <p style="color: rgb(13, 243, 101); font-weight: bold;"><%= percentage.toFixed(2) %> %</p>
+                            <% } %>
+                            
                     </div> 
 
                     <div class="flex-item">
@@ -37,10 +43,14 @@
                             <% var totalUniqueDates = totalResult[0].total_unique_dates; %>
                             <% var daysOccurred = result[0].days_occurred; %>
                             <% var percentageout = (missed / totalUniqueDates) * 100; %>
-                            <p><%= percentageout %> %</p>
+                            <% if (percentageout < 50) { %>
+                                <p style="color: green;font-weight: bold;"><%= percentageout.toFixed(2) %> %</p>
+                            <% } else { %>
+                                <p style="color: red; font-weight: bold;"><%= percentageout.toFixed(2) %> %</p>
+                            <% } %>
                     </div> 
  
 </div>
-
+</div>
 
 <%- include('../partials/footer') -%>

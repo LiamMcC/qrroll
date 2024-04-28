@@ -1,58 +1,27 @@
 <%- include('../partials/header') -%>
       <div class="container">
-       
-      
+ 
+    <h1>Class Groups Attendance Grids</h1> 
+    <p>Pick a class to see the attendance grid.</p>
 
-    <h1>Class Groups</h1> 
+        
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                
-                
-          
+                <th>Class Group</th>
+                <th>Attendance Link</th>
             </tr>
         </thead>
         <tbody>
             <% classNames.forEach(item => { %>
                 <tr>
                     <td><%= item %></td>
-                  
+                    <td><a href="/classmodules/<%= item %>" >View All <%= item %> Modules</a></td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
-
-
-
 </div>
-
-
-<div class="rcontainer">
-
-  
-    <% classNames.forEach(className => { %>
-      <div class="flex-item">
-        <div class="rheader"> <%= className %></div>
-    <div class="icon"><i class="fa fa-folder"></i></div>
-    <a href="/classmodules/<%= className %>" class="button">See It</a>
-     
-    </div>
-    <% }); %>
-  
-
-  
-    
-  </div>
-  
-
-
- 
-
-
-  
-
-
 
 
 <%- include('../partials/footer') -%>

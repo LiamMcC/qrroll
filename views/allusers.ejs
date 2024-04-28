@@ -1,0 +1,148 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+
+    <h1>Administration Of For all students</h1> 
+    <p>Here you can modify user privilages. 
+      
+
+    </p>
+    
+   
+
+
+
+<div class="rcontainer">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Admin?</th>
+                <th>Verified?</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% results.forEach(item => { %>
+                <tr>
+                    <td><%= item.id %></td>
+                    <td><%= item.realname %></td>
+                    <td>
+                    <% if (item.adminr) { %>
+                        <i class="fa fa-check-square" style="color:green"></i>
+                    <% } else { %>
+                        <i class="fa fa-minus-square" style="color:red" onclick="makeAdmin('<%= item.realname %>', '<%= item.id %>')"></i>
+                    <% } %>
+
+                    </td>
+
+
+                    
+                    <td>
+                        
+                        <% if (item.email_verified) { %>
+                            <i class="fa fa-check-square" style="color:green"></i>
+                        <% } else { %>
+                            <i class="fa fa-minus-square" style="color:red" onclick="verifyUser('<%= item.realname %>', '<%= item.id %>')"></i>
+                        <% } %>
+                    </td>
+              
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+  </div>
+  <br>
+  <br>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <script>
+    function makeAdmin(userName,userId) {
+        Swal.fire({
+            title: 'Confirm',
+            text: `Are you sure you want to make ${userName} an admin?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, make admin'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform AJAX POST request to make the user an admin
+                $.ajax({
+                    type: 'POST',
+                    url: '/makeAdmin/' + userId,
+                    data: { userId: userId },
+                    success: function(response) {
+                        Swal.fire(
+                            'Success!',
+                            `${userName} is now an admin.`,
+                            'success'
+                        );
+
+                        setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to make admin.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+
+
+
+    function verifyUser(userName,userId) {
+        Swal.fire({
+            title: 'Confirm',
+            text: `Are you sure that ${userName} is a member of staff?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, they are!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform AJAX POST request to make the user an admin
+                $.ajax({
+                    type: 'POST',
+                    url: '/verifyuser/' + userId,
+                    data: { userId: userId },
+                    success: function(response) {
+                        Swal.fire(
+                            'Success!',
+                            `${userName} is a verified staff member to use the roll sections of this application.`,
+                            'success'
+                        );
+
+                        setTimeout(function() {
+                                window.location.reload();
+                            }, 3000);
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to make admin.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+ 
+  
+</div>
+<%- include('../partials/footer') -%>
+</body>
+</html>

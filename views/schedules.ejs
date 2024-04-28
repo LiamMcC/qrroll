@@ -1,0 +1,56 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+
+    <h1>Administration Of For all Modules & Classes</h1> 
+    <p>Here you can modify class modules and times. 
+      
+
+    </p>
+    
+   
+
+
+
+<div class="rcontainer">
+    <table>
+        <thead>
+            <tr>
+                
+                <th>Module</th>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                
+
+            
+
+            </tr>
+        </thead>
+        <tbody>
+            <% results.forEach(item => { %>
+                <tr>
+               
+                    <td><%= item.module_name %></td>
+                    <td><%= item.dayofweek %></td>
+                    <td><%= item.starttime %></td>
+                    <td><%= item.endtime %></td>
+                    
+                   
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+  </div>
+  <br>
+  <br>
+  
+ 
+
+ 
+   
+  
+</div>
+<%- include('../partials/footer') -%>
+</body>
+</html>

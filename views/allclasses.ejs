@@ -1,0 +1,239 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+
+    <h1>Administration Of For all Modules & Classes</h1> 
+    <p>Here you can modify class modules and times. 
+      
+
+    </p>
+    
+   
+
+
+
+<div class="rcontainer">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>View</th>
+                <th>Add</th>
+                <th>Remove</th>
+                <th>View</th>
+                <th>Edit</th>
+            
+
+            </tr>
+        </thead>
+        <tbody>
+            <% results.forEach(item => { %>
+                <tr>
+                    <td><%= item.id %></td>
+                    <td><%= item.class %></td>
+                    <td><p onclick="seeClasses('<%= item.id %>', '<%= item.class %>')">See Modules</p> </td>
+                    <td><p onclick="addModule('<%= item.id %>', '<%= item.class %>')">Add Modules</p> </td>
+                    <td><p onclick="removeModule('<%= item.id %>', '<%= item.class %>')">Remove Modules</p> </td>
+                    <td><a href="/schedules/<%= item.id %>" style="color:rgb(131, 41, 235)">View Times</a></td>
+                    <td><a href="/editschedules/<%= item.id %>" style="color:rgb(131, 41, 235)">Edit Times</a></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+  </div>
+  <br>
+  <br>
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script>
+    function seeClasses(classId, group) {
+        console.log(classId)
+      // Perform AJAX GET request to fetch class modules
+      $.ajax({
+        type: 'GET',
+        url: '/managemodules/' + classId,
+        success: function(response) {
+          let modules = '';
+  
+          // Construct the module list
+          response.modules.forEach(module => {
+            modules += `<div class="module-list">${module.module}</div>`;
+          });
+         
+          // Show the modules in a SweetAlert dialog
+          Swal.fire({
+            title: group + ' Modules',
+            html: modules,
+            icon: 'info',
+            confirmButtonText: 'Close'
+          });
+        },
+        error: function(xhr, status, error) {
+          Swal.fire(
+            'Error!',
+            'Failed to fetch class modules.',
+            'error'
+          );
+        }
+      });
+    }
+
+
+
+
+    function removeModule(classId, group) {
+    let selectedModules = []; // Array to store IDs of selected modules
+
+    // Perform AJAX GET request to fetch class modules
+    $.ajax({
+        type: 'GET',
+        url: '/managemodules/' + classId,
+        success: function(response) {
+            let modules = '';
+
+            // Construct the module list
+            response.modules.forEach(module => {
+                modules += `<div class="module-list" data-module-id="${module.id}">${module.module}</div>`;
+            });
+
+            // Show the modules in a SweetAlert dialog
+            Swal.fire({
+                title: 'Remove ' +  group + ' Modules',
+                html: '<p>Click on any module to remove it from the group. You can add these back in later if you like.</p><br>' + modules,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform AJAX POST request to send selected modules to the server
+                    $.ajax({
+                        type: 'POST',
+                        url: '/removemodules', // Change this to the appropriate server endpoint
+                        data: { classId: classId, selectedModules: selectedModules },
+                        success: function(response) {
+                            Swal.fire(
+                                'Success!',
+                                'Selected modules have been removed successfully.',
+                                'success'
+                            );
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire(
+                                'Error!',
+                                'Failed to remove selected modules.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+
+            // Add event listener to toggle selection of modules
+            $('.module-list').on('click', function() {
+                $(this).toggleClass('selected');
+                const moduleId = $(this).data('module-id');
+                if ($(this).hasClass('selected')) {
+                    // Add module ID to selectedModules array
+                    selectedModules.push(moduleId);
+                    console.log(selectedModules)
+                } else {
+                    // Remove module ID from selectedModules array
+                    selectedModules = selectedModules.filter(id => id !== moduleId);
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire(
+                'Error!',
+                'Failed to fetch class modules.',
+                'error'
+            );
+        }
+    });
+}
+
+
+
+function addModule(classId, group) {
+    let selectedModules = []; // Array to store IDs of selected modules
+
+    // Perform AJAX GET request to fetch class modules
+    $.ajax({
+        type: 'GET',
+        url: '/listallmodules',
+        success: function(response) {
+            let modules = '';
+
+            // Construct the module list
+            response.modules.forEach(module => {
+                modules += `<div class="module-list" data-module-id="${module.id}">${module.module}</div>`;
+            });
+
+            // Show the modules in a SweetAlert dialog
+            Swal.fire({
+                title: 'Add ' +  group + ' Modules',
+                html: '<p>Click on any module to remove it from the group. You can add these back in later if you like.</p><br>' + modules,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform AJAX POST request to send selected modules to the server
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addmodules', // Change this to the appropriate server endpoint
+                        data: { classId: classId, selectedModules: selectedModules },
+                        success: function(response) {
+                            Swal.fire(
+                                'Success!',
+                                'Selected modules have been removed successfully.',
+                                'success'
+                            );
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire(
+                                'Error!',
+                                'Failed to remove selected modules.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+
+            // Add event listener to toggle selection of modules
+            $('.module-list').on('click', function() {
+                $(this).toggleClass('selected');
+                const moduleId = $(this).data('module-id');
+                if ($(this).hasClass('selected')) {
+                    // Add module ID to selectedModules array
+                    selectedModules.push(moduleId);
+                    console.log(selectedModules)
+                } else {
+                    // Remove module ID from selectedModules array
+                    selectedModules = selectedModules.filter(id => id !== moduleId);
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            Swal.fire(
+                'Error!',
+                'Failed to fetch class modules.',
+                'error'
+            );
+        }
+    });
+}
+
+
+
+  </script>
+   
+  
+</div>
+<%- include('../partials/footer') -%>
+</body>
+</html>

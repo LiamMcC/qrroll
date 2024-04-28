@@ -1,7 +1,8 @@
 <%- include('../partials/header') -%>
 
 <!-- classgroups.ejs -->
-<h1>Modules for Class <%= className %></h1>
+<div class="container">
+<h1>Attendance Statistics For <%= className %></h1>
 <p>These are the modules for <%= className %> grouped per day. 
     <br>If you pick on any of the links you will see the % 
 of overall attendance for each student in this group for the particular module.
@@ -16,14 +17,14 @@ of overall attendance for each student in this group for the particular module.
                 <h2><%= day %></h2>
                 
                     <% schedule.filter(item => item.dayOfWeek === day).forEach(item => { %>
-                        <a href="/attendance_report/<%= className %>/<%= item.moduleName %>"><%= item.module %> <%= item.moduleName %></a></br>
+                        <a href="/attendance_report/<%= className %>/<%= item.moduleName %>"><%= item.moduleName %></a></br>
                     <% }); %>
                
             </div>
         <% }); %>
    
   
-   
+    </div>
    
  
 

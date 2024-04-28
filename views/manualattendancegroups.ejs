@@ -8,19 +8,33 @@
 <p>Select The Group You Want To Manually Alter Attendance For</p>
 
 
-</div>
+
 
 
 <div class="rcontainer">
+    <table>
+        <thead>
+            <tr>
+                <th>Module Name</th>
+                <th>Attendance Link</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            <% result.forEach(item => { %>
+                <tr>
+                    <td><%= item.class %></td>
+                    <td><a href="/manualattendancemodules/<%= item.class %>">Manually Alter Attendance for </a></td>
+                   
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
 
     
-<% result.forEach(item => { %>
-    <div class="flex-item">
-    <h2><%= item.class %></h2>
-    <a href="/manualattendancemodules/<%= item.class %>" class="button">See Students</a>
+
 </div>
-    <% }); %>
-    
 
 </div>
 

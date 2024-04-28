@@ -1,27 +1,33 @@
 
 <%- include('../partials/header') -%>
+
 <div class="container">
- 
+    <h1>Student Attendance Statistics Per Group</h1>
+    <p>Click a class to see a list of all students in that module that have recordes an attendance so far.</p>
+    <p>From there you can click each student to see detailes attendance statistics</p>
 
-
-<h1>All QR Codes</h1> 
-
-<a href="/sendallcodes" class="button">Send Them All</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Class</th>
+                <th>No Attended</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <% result.forEach(item => { %>
+                <tr>
+                    <td><%= item.class %></td>
+                    <td><a href="/classattendance/<%= item.class %>">See Students</a></td>
+                    
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
 </div>
 
 
-<div class="rcontainer">
 
-    
-<% result.forEach(item => { %>
-    <div class="flex-item">
-    <h2><%= item.class %></h2>
-    <a href="/classattendance/<%= item.class %>" class="button">See Students</a>
-</div>
-    <% }); %>
-    
-
-</div>
 
 <%- include('../partials/footer') -%>
 </body>

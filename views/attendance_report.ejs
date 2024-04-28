@@ -2,20 +2,16 @@
 <body>
 
     <div class="container">
-    <h1>Attendance Report - <%= moduleName %></h1>
-    <p style="color: red;">Nothe this seems to be wrong its counting the number of times students were in 
-    <br>It should count the no of times the module occurred! 
-    <br>So it is counting the total number of attendances of all students not the days the module occurred.
-    </p>
-    <p style="color: green;">This issue seems to have been fixed 21/4/2024 but needs further testing</p>
-    <h1>No Of Classes So Far - <%= totalUniqueDates %></h1>
+    <h1>Attendance Statistics<br><%= groupName %>, <%= moduleName %></h1>
+    
+    <h1>Total Number Of Classes So Far - <%= totalUniqueDates %></h1>
     
 
     <table>
         <thead>
             <tr>
                 <th>Student Name</th>
-                <th>No</th>
+                <th>No Attended</th>
                 <th>Percentage</th>
             </tr>
         </thead>

@@ -2,8 +2,12 @@
 <body>
 
     <div class="container">
-    <h1>Attendance Grid! <%= classParam %> <%= moduleParam %> </h1>
+    <h1>Attendance Grid<br><%= classParam %>, <%= moduleParam %> </h1>
+    <a href="/download/attendance/<%= classParam %>/<%= moduleParam %>" class="button">Download CSV</a>
 
+
+    <br>
+    <br>
     <table border="1">
         <thead>
             <tr>
@@ -31,5 +35,9 @@
         </tbody>
     </table>
     </div>
+
+ 
+    <%- include('../partials/footer') -%>
+
 </body>
 </html>

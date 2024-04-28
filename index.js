@@ -9,12 +9,21 @@ const app = express();
 var bodyParser = require("body-parser")
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+
+
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
 app.use(express.static("script")); 
+app.use(express.static("images")); 
+app.use(express.static("style")); 
 app.use(express.static("qrcodes")); 
 app.use(express.static("uploads")); 
 app.use(express.static("coms")); 
+app.use(express.static("controllers")); 
+
+
+app.use(require('./routes.js'));
+app.use(require('./controllers/user'))
 
 var timetableData = require('./class.json')
 
@@ -24,268 +33,107 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 var mysql = require('mysql');
 
+app.use((req, res, next) => {
+  res.locals.cookies = req.cookies;
+  next();
+});
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+      return next();
+  }
+  res.redirect('/login');
+}
+
+function isAdmin(req, res, next) {
+	// if user is authenticated in the session, carry on
+	if (req.user.adminRights)
+		return next();
+	// if they aren't redirect them to the home page
+	res.redirect('/login');
+}
+
+
+function isVerified(req, res, next) {
+	// if user is authenticated in the session, carry on
+	if (req.user.email_verified)
+		return next();
+	// if they aren't redirect them to the home page
+	res.redirect('/verifyneeded');
+}
+
 // ******************************** Start of SQL **************************************** //
 // First we need to tell the application where to find the database
-const db = mysql.createPool({
-  connectionLimit: 10, // Adjust this value based on your application's needs
-  host: '127.0.0.1',
-  user: 'root',
-  port: '3306',
-  password: 'Root',
-  database: 'studentrole'
-});
-
-// Test the connection pool
-db.getConnection((err, connection) => {
-  if (err) {
-      console.error('Error connecting to the database:', err);
-  } else {
-      console.log('Database connection pool established successfully');
-      connection.release(); // Release the connection back to the pool
-  }
-});
+var db = require('./db');
 
     
-
-
-// Define a route to render the index.ejs page
-app.get('/', (req, res) => {
-  res.render('scanindex');
-});
-
-
-// ************************* Trial QR Route Using Databases 
-app.post('/qrdatadb', (req, res) => {
-  const { data, currentTime } = req.body;
-  const qrData = JSON.parse(data); // Parse JSON data
-  const cgroup = qrData.class;
-
-  const currentDate = new Date();
-  const dayOfWeek = getDayOfWeek(currentDate);
-
-  console.log("The Time is " + currentTime);
-  console.log(dayOfWeek);
-
-  // Query class schedule for the specified class and day of the week
-  const query = `
-      SELECT m.module AS moduleName, s.starttime, s.endtime
-      FROM schediletable s
-      INNER JOIN moduletable m ON s.module = m.id
-      INNER JOIN classtable c ON s.class = c.id
-      WHERE c.class = ? AND s.dayofweek = ?
-  `;
-
-  db.query(query, [cgroup, dayOfWeek], (err, rows) => {
-      if (err) {
-          console.error('Error fetching class schedule:', err);
-          res.status(500).send('Error fetching class schedule');
-          return;
-      }
-
-      // Iterate over each module in the schedule
-      rows.forEach(row => {
-          const startTime = row.starttime;
-          const endTime = row.endtime;
-          const themodule = row.moduleName
-          const currentHourMinute = currentTime.split(':');
-          const currentHour = parseInt(currentHourMinute[0]);
-          const currentMinute = parseInt(currentHourMinute[1]);
-
-          // Parse start time and end time
-          const startHourMinute = startTime.split(':');
-          const startHour = parseInt(startHourMinute[0]);
-          const startMinute = parseInt(startHourMinute[1]);
-
-          const endHourMinute = endTime.split(':');
-          const endHour = parseInt(endHourMinute[0]);
-          const endMinute = parseInt(endHourMinute[1]);
-
-          // Check if the current time falls within the module time range
-          if (
-              (currentHour > startHour || (currentHour === startHour && currentMinute >= startMinute)) &&
-              (currentHour < endHour || (currentHour === endHour && currentMinute <= endMinute))
-          ) {
-              // Insert module data into the database
-              if (data) {
-                  console.log(data);
-                  const qrData = JSON.parse(data); // Parse JSON data
-                  const fname = qrData.fname;
-                  const sname = qrData.sname;
-                  const sno = qrData.student_number;
-                  const name = fname + " " + sname
-
-                  const insertQuery = 'INSERT INTO qr_codes (content, class, student, cDay, module, studentNo, fname, sname) VALUES (?, ?, ?, ?, ?, ? , ? , ?)';
-                  db.query(insertQuery, [data, cgroup, name, dayOfWeek, themodule, sno, fname, sname], (err, result) => {
-                      if (err) {
-                          console.error('Error inserting QR code data:', err);
-                          res.status(500).send('Error inserting QR code data');
-                      } else {
-                          console.log('QR code data inserted successfully:', data);
-                      }
-                  });
-              } else {
-                  console.log('Missing QR code data');
-                  res.status(400).send('Missing QR code data');
-                  return; // Return to avoid further processing
-              }
-          }
-      });
-
-      // Send response once all processing is done
-      res.sendStatus(200);
+app.get('/verifyneeded', (req, res) => {
+  console.log(req.user)
+    res.render('verifyneeded', { user: req.user});
   });
-});
 
-
-// ************************* Trial QR Route Using Databases 
-
-
-// Route to handle QR code data
-app.post('/qrdata', (req, res) => {
-    const { data, currentTime } = req.body;
-    const qrData = JSON.parse(data); // Parse JSON data
-    const cgroup = qrData.class;
-  
-    // Load class schedule from class.json
-    const classSchedule = JSON.parse(fs.readFileSync('class.json', 'utf8'));
-  
-    const currentDate = new Date();
-    const dayOfWeek = getDayOfWeek(currentDate);
-  
-    console.log("The Time is " + currentTime);
-    console.log(dayOfWeek);
-  
-    // Check if the class schedule for the specified class exists
-    if (classSchedule.classes) {
-      // Find the schedule for the specified class
-      const classInfo = classSchedule.classes.find(classInfo => classInfo.class === cgroup);
-      
-      if (classInfo && classInfo.schedule[dayOfWeek]) {
-        const modules = classInfo.schedule[dayOfWeek];
-        const currentHourMinute = currentTime.split(':');
-        const currentHour = parseInt(currentHourMinute[0]);
-        const currentMinute = parseInt(currentHourMinute[1]);
-  
-        for (const module of modules) {
-          const timeRange = module.time.split(' - ');
-          const startTime = timeRange[0].split(':');
-          const endTime = timeRange[1].split(':');
-          const startHour = parseInt(startTime[0]);
-          const startMinute = parseInt(startTime[1]);
-          const endHour = parseInt(endTime[0]);
-          const endMinute = parseInt(endTime[1]);
-  
-          if (
-            currentHour > startHour || 
-            (currentHour === startHour && currentMinute >= startMinute)
-          ) {
-            if (
-              currentHour < endHour || 
-              (currentHour === endHour && currentMinute <= endMinute)
-            ) {
-              if (data) {
-                console.log(data);
-                const qrData = JSON.parse(data); // Parse JSON data
-                const fname = qrData.fname;
-                const sname = qrData.sname;
-                const sno = qrData.student_number;
-                const name = fname + " " + sname
-                
-                const insertQuery = 'INSERT INTO qr_codes (content, class, student, cDay, module, studentNo, fname, sname) VALUES (?, ?, ?, ?, ?, ? , ? , ?)';
-                db.query(insertQuery, [data, cgroup, name, dayOfWeek, module.module, sno, fname, sname ], (err, result) => {
-                  if (err) {
-                    console.error('Error inserting QR code data:', err);
-                    res.status(500).send('Error inserting QR code data');
-                  } else {
-                    console.log('QR code data inserted successfully:', data);
-                    res.sendStatus(200);
-                  }
-                });
-              } else {
-                res.status(400).send('Missing QR code data');
-              }
-              console.log(`You have ${module.module} class now!`);
-              // Do something with the module, such as storing it in the database
-            }
-          }
-        }
-      }
-    }
-  });
-  
-  // Function to get the day of the week as a string (e.g., "Monday", "Tuesday")
-  function getDayOfWeek(date) {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dayIndex = date.getDay();
-    return daysOfWeek[dayIndex];
-  }
-  
-
-
-
-  app.get('/roll', function(req, res){
+app.get('/roll',isLoggedIn, isVerified, function(req, res){
 
     let sqlcount = 'SELECT COUNT(DISTINCT content) AS unique_count FROM qr_codes WHERE class = ? ';
     let querycount = db.query(sqlcount,['Software1'],(err,result) => {
- console.log(result[0].unique_count)
-
-});
+    });
 
         //WHERE class = ?  and module = ? GROUP BY content
         let sql = 'select * from qr_codes ';
             let query = db.query(sql,['Software1'],(err,result) => {
          res.render('roll', {result, user: req.user});
-   
-  });
+        });
   
      
-    });
+});
 
 
 
-    // ************************ ATtendance per module inc fraction & % 
-    function calculateAttendance(records, moduleName) {
-      // Filter records for the specified module
-      const moduleRecords = records.filter(record => record.module === moduleName);
+  //   // ************************ ATtendance per module inc fraction & % 
+  //   function calculateAttendance(records, moduleName) {
+  //     // Filter records for the specified module
+  //     const moduleRecords = records.filter(record => record.module === moduleName);
       
-      // Count unique dates
-      const uniqueDates = [...new Set(moduleRecords.map(record => record.scanned_at.toDateString()))];
-      const totalDates = uniqueDates.length;
+  //     // Count unique dates
+  //     const uniqueDates = [...new Set(moduleRecords.map(record => record.scanned_at.toDateString()))];
+  //     const totalDates = uniqueDates.length;
       
-      // Calculate attendance fraction and percentage for each student
-      const attendanceStats = {};
-      moduleRecords.forEach(record => {
-          const key = `${record.studentNo}_${record.fname}_${record.sname}`;
-          if (!attendanceStats[key]) {
-              attendanceStats[key] = { attended: 0, total: 0 };
-          }
-          attendanceStats[key].total++;
-          if (uniqueDates.includes(record.scanned_at.toDateString())) {
-              attendanceStats[key].attended++;
-          }
-      });
+  //     // Calculate attendance fraction and percentage for each student
+  //     const attendanceStats = {};
+  //     moduleRecords.forEach(record => {
+  //         const key = `${record.studentNo}_${record.fname}_${record.sname}`;
+  //         if (!attendanceStats[key]) {
+  //             attendanceStats[key] = { attended: 0, total: 0 };
+  //         }
+  //         attendanceStats[key].total++;
+  //         if (uniqueDates.includes(record.scanned_at.toDateString())) {
+  //             attendanceStats[key].attended++;
+  //         }
+  //     });
       
-      // Calculate attendance percentage and absent percentage
-      const report = [];
-      for (const [key, stats] of Object.entries(attendanceStats)) {
-          const [studentNo, fname, sname] = key.split('_');
-          const attendancePercentage = (stats.attended / totalDates) * 100;
-          const absentPercentage = 100 - attendancePercentage;
-          report.push({
-              studentNo,
-              fname,
-              sname,
-              attendanceFraction: `${stats.attended}/${totalDates}`,
-              attendancePercentage: attendancePercentage.toFixed(2),
-              absentPercentage: absentPercentage.toFixed(2)
-          });
-      }
+  //     // Calculate attendance percentage and absent percentage
+  //     const report = [];
+  //     for (const [key, stats] of Object.entries(attendanceStats)) {
+  //         const [studentNo, fname, sname] = key.split('_');
+  //         const attendancePercentage = (stats.attended / totalDates) * 100;
+  //         const absentPercentage = 100 - attendancePercentage;
+  //         report.push({
+  //             studentNo,
+  //             fname,
+  //             sname,
+  //             attendanceFraction: `${stats.attended}/${totalDates}`,
+  //             attendancePercentage: attendancePercentage.toFixed(2),
+  //             absentPercentage: absentPercentage.toFixed(2)
+  //         });
+  //     }
       
-      return report;
-  }
+  //     return report;
+  // }
+  
+
   
   // Route to generate the attendance report
-  app.get('/attendance_report/:group/:module', (req, res) => {
+  app.get('/attendance_report/:group/:module',isLoggedIn, (req, res) => {
     const moduleName = req.params.module;
     const groupName = req.params.group;
 
@@ -330,7 +178,7 @@ app.post('/qrdata', (req, res) => {
             }));
 
             // Render the EJS template with the result
-            res.render('attendance_report', { moduleName, attendanceReport, totalUniqueDates });
+            res.render('attendance_report', { moduleName, attendanceReport, totalUniqueDates, groupName, user: req.user });
         });
     });
 });
@@ -345,7 +193,7 @@ app.post('/qrdata', (req, res) => {
     //*&*&*&*&*&*&*&*&**&*&*&*&**&*&*  Manual attendance entry
 
  // render all classes 
- app.get('/manualattendance', (req, res) => {
+ app.get('/manualattendance',isLoggedIn, (req, res) => {
   // SQL query to retrieve unique course names
   const sqlQuery = `
   SELECT DISTINCT class
@@ -364,12 +212,12 @@ db.query(sqlQuery, (err, result) => {
   const uniqueCourses = result.map(row => row.class);
 
   // Render the EJS template with the unique course names
-  res.render('manualattendancegroups', { result });
+  res.render('manualattendancegroups', { result, user: req.user });
 });
 });
 
 
-app.get('/manualattendancemodules/:className', (req, res) => {
+app.get('/manualattendancemodules/:className',isLoggedIn, (req, res) => {
   const className = req.params.className;
 
   // Query the database to retrieve the class schedule for the given className
@@ -400,14 +248,14 @@ app.get('/manualattendancemodules/:className', (req, res) => {
       }));
 
       // Render the view with the class schedule data
-      res.render('manualmodulespergroup', { className, schedule });
+      res.render('manualmodulespergroup', { className, schedule, user: req.user });
   });
 });
 
 
 
     // Route to generate the attendance report
-    app.get('/manualattendance/:group/:module', (req, res) => {
+    app.get('/manualattendance/:group/:module',isLoggedIn, (req, res) => {
       // Query to get all unique dates
 
        var theGroup = req.params.group
@@ -416,7 +264,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
       const uniqueDatesQuery = 'SELECT DISTINCT DATE(scanned_at) AS date FROM qr_codes ORDER BY date';
       
       // Query to get all student names
-      const studentNamesQuery = 'SELECT DISTINCT studentNo, CONCAT(fname, " ", sname) AS fullName FROM qr_codes WHERE class = ?';
+      const studentNamesQuery = 'SELECT DISTINCT studentNo, CONCAT(fname, " ", sname) AS fullName FROM qr_codes WHERE class = ? AND module = ?  ';
       
       // Execute both queries
       db.query(uniqueDatesQuery, (err, dates) => {
@@ -426,7 +274,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
               return;
           }
           
-          db.query(studentNamesQuery,[theGroup], (err, students) => {
+          db.query(studentNamesQuery,[theGroup, theModule], (err, students) => {
               if (err) {
                   console.error('Error fetching student names:', err);
                   res.status(500).send('Error fetching student names');
@@ -455,11 +303,14 @@ app.get('/manualattendancemodules/:className', (req, res) => {
     
                   // Update the attendance map based on the fetched data
                   attendanceData.forEach(row => {
-                      attendanceMap[row.fullName][row.date] = row.present;
-                  });
+                    if (!attendanceMap[row.fullName]) {
+                        attendanceMap[row.fullName] = {}; // Initialize as an empty object if it doesn't exist
+                    }
+                    attendanceMap[row.fullName][row.date] = row.present;
+                });
     
                   // Render the attendance grid page with fetched data
-                  res.render('manualattendance', { dates, students, attendanceMap, theGroup, theModule });
+                  res.render('manualattendance', { dates, students, attendanceMap, theGroup, theModule, user: req.user });
               });
           });
       });
@@ -470,7 +321,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
 
     // Post manual entry
 // /changeAttendance/" + studentNo + "/" + tehclass + "/" + module,
-    app.post('/changeAttendance/:studentNo', (req, res) => {
+    app.post('/changeAttendance/:studentNo',isLoggedIn, (req, res) => {
       const data = req.body;
     
      console.log(data.studentName + "888888" +   data.studentName, 
@@ -511,7 +362,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
 
   // *********** Attendance Grid Per Group Per Module 
 
-  app.get('/attendance_grid/:class/:module', (req, res) => {
+  app.get('/attendance_grid/:class/:module',isLoggedIn, (req, res) => {
   
   const classParam = req.params.class;
   const moduleParam = req.params.module;
@@ -577,7 +428,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
 
              
               // Render the attendance grid page with fetched data
-              res.render('attendance_module.ejs', { dates, students, attendanceMap, classParam, moduleParam});
+              res.render('attendance_module.ejs', { dates, students, attendanceMap, classParam, moduleParam, user: req.user});
           });
       });
   });
@@ -591,7 +442,7 @@ app.get('/manualattendancemodules/:className', (req, res) => {
 
 
 // Route to render the attendance grid page All Modules , Classes & Students 
-app.get('/attendance_grid', (req, res) => {
+app.get('/attendance_grid',isLoggedIn, (req, res) => {
   // Query to get all unique dates
   const uniqueDatesQuery = 'SELECT DISTINCT DATE(scanned_at) AS date FROM qr_codes ORDER BY date';
   
@@ -638,7 +489,7 @@ app.get('/attendance_grid', (req, res) => {
               });
 
               // Render the attendance grid page with fetched data
-              res.render('attendance_grid.ejs', { dates, students, attendanceMap });
+              res.render('attendance_grid.ejs', { dates, students, attendanceMap , user: req.user});
           });
       });
   });
@@ -653,11 +504,11 @@ app.get('/attendance_grid', (req, res) => {
 
 
 // *************************** Class Groups
-app.get('/classgroups', (req, res) => {
+app.get('/classgroups',isLoggedIn, (req, res) => {
   //res.send(timetableData)
   const classNames = timetableData.classes.map(item => item.class);
   console.log(classNames)
-  res.render('classgroups', {classNames});
+  res.render('classgroups', {classNames, user: req.user});
 });
 
 
@@ -677,7 +528,7 @@ app.get('/classgroups', (req, res) => {
 // });
 
 
-app.get('/classmodules/:className', (req, res) => {
+app.get('/classmodules/:className',isLoggedIn, (req, res) => {
   const className = req.params.className;
 
   // Query the database to retrieve the class schedule for the given className
@@ -708,7 +559,7 @@ app.get('/classmodules/:className', (req, res) => {
       }));
 
       // Render the view with the class schedule data
-      res.render('modulesperclass', { className, schedule });
+      res.render('modulesperclass', { className, schedule, user: req.user });
   });
 });
 
@@ -716,13 +567,26 @@ app.get('/classmodules/:className', (req, res) => {
 
 // ******************** One QR Code
 
-app.get('/generateqr', (req, res) => {
-  res.render('generateqr');
+app.get('/generateqr',isLoggedIn, (req, res) => {
+  // SQL query to select all records from the classtable
+  const query = 'SELECT * FROM classtable';
+
+  // Execute the SQL query
+  db.query(query, (err, results) => {
+      if (err) {
+          console.error('Error fetching classtable data:', err);
+          res.status(500).send('Error fetching classtable data');
+          return;
+      }
+
+      // Render the view template and pass the results
+      res.render('generateqr', { results, user: req.user });
+  });
 });
 
 
 
-app.post('/generateqr', (req, res) => {
+app.post('/generateqr',isLoggedIn, (req, res) => {
 
   const studentInfo = {
     student_number: req.body.studentno,
@@ -763,7 +627,7 @@ const codename = path.join(directory, filename);
 });
 
 
-app.get('/generatemultipleqr', (req, res) => {
+app.get('/generatemultipleqr',isLoggedIn, (req, res) => {
   res.render('generatemultipleqr');
 });
 
@@ -819,7 +683,7 @@ app.post('/generatemultipleqr', upload.single('csvFile'), (req, res) => {
     })
     .on('end', () => {
       console.log('All data processed');
-      res.redirect('/allcodes');
+      res.redirect('/allcodes', { user: req.user});
     });
 });
 
@@ -829,18 +693,30 @@ app.post('/generatemultipleqr', upload.single('csvFile'), (req, res) => {
 
 
 // ******************** all Codes
-app.get('/allcodes', (req, res) => {
+app.get('/allcodes',isLoggedIn, (req, res) => {
 
-  let sqlcount = 'SELECT * from student_codes ';
+  let sqlcount = 'SELECT * from student_codes order by class ASC';
   let querycount = db.query(sqlcount,(err,result) => {
-    res.render('allcodes', {result});
+    res.render('allcodes', {result, user: req.user});
 
 });
   
 });
 
 
-app.get('/sendallcodes', (req, res) => {
+app.get('/download/template',isLoggedIn, (req, res) => {
+  const templateFilePath = 'qrTemplate.csv'; // Update with the actual path to your CSV template file
+  res.download(templateFilePath, 'qrTemplate.csv', (err) => {
+      if (err) {
+          // Handle error, such as file not found
+          console.error('Error downloading template:', err);
+          res.status(500).send('Error downloading template');
+      }
+  });
+});
+
+
+app.get('/sendallcodes',isLoggedIn, (req, res) => {
   let sql = 'SELECT * FROM student_codes';
   db.query(sql, (err, result) => {
       if (err) {
@@ -876,7 +752,7 @@ app.get('/sendallcodes', (req, res) => {
 
 
 // %%%%%%%%%%%%%%%%%%% Group Modules
-app.get('/groupmodules', (req, res) => {
+app.get('/groupmodules',isLoggedIn, (req, res) => {
   const query = 'SELECT class FROM classtable';
   db.query(query, (err, results) => {
       if (err) {
@@ -886,13 +762,13 @@ app.get('/groupmodules', (req, res) => {
       }
 
       
-      res.render('groupmodules', { results });
+      res.render('groupmodules', { results, user: req.user });
   });
 });
 
 
 
-app.get('/individualgroupmodules/:className', (req, res) => {
+app.get('/individualgroupmodules/:className',isLoggedIn, (req, res) => {
   const className = req.params.className;
 
   // Query the database to retrieve the class schedule for the given className
@@ -923,7 +799,7 @@ app.get('/individualgroupmodules/:className', (req, res) => {
       }));
 
       // Render the view with the class schedule data
-      res.render('individualgroupmodules', { className, schedule });
+      res.render('individualgroupmodules', { className, schedule, user: req.user});
   });
 });
 
@@ -936,7 +812,7 @@ app.get('/individualgroupmodules/:className', (req, res) => {
 
 
 // list of courses to click on here
-app.get('/classgroupsoverall', (req, res) => {
+app.get('/classgroupsoverall',isLoggedIn, (req, res) => {
   // SQL query to retrieve unique course names
   const sqlQuery = `
   SELECT DISTINCT class
@@ -955,14 +831,14 @@ db.query(sqlQuery, (err, result) => {
   const uniqueCourses = result.map(row => row.class);
 
   // Render the EJS template with the unique course names
-  res.render('classgroupsoverall', { result });
+  res.render('classgroupsoverall', { result, user: req.user });
 });
 });
 
 
 // list of students per course here
 
-app.get('/classattendance/:group', (req, res) => {
+app.get('/classattendance/:group',isLoggedIn, (req, res) => {
   
   const sqlQuery = `
   SELECT DISTINCT studentNo, CONCAT(fname, ' ', sname) AS fullname, class
@@ -982,13 +858,13 @@ app.get('/classattendance/:group', (req, res) => {
         const distinctNames = result.map(row => row.fullname);
 console.log(result)
         // Render the EJS template with the distinct full names
-        res.render('studentsinclass', { result });
+        res.render('studentsinclass', { result, user: req.user });
     });
 });
 
 
 
-app.get('/overallattendance/:group/:studentno', (req, res) => {
+app.get('/overallattendance/:group/:studentno',isLoggedIn, (req, res) => {
   const student = req.params.studentno;
   const groupName = req.params.group;
 
@@ -1027,12 +903,99 @@ app.get('/overallattendance/:group/:studentno', (req, res) => {
          
 
           // Render the EJS template with the result
-          res.render('overallattendance', { totalResult, result });
+          res.render('overallattendance', { totalResult, result, user: req.user });
       });
   });
 });
 
 //&&&&&&&&&&&&&&&&&& Student Overall Attendance End
+
+
+
+// ************* Downloads 
+
+app.get('/download/attendance/:group/:module',isLoggedIn, (req, res) => {
+  // Query to get all unique dates
+  const uniqueDatesQuery = 'SELECT DISTINCT DATE(scanned_at) AS date FROM qr_codes ORDER BY date';
+  
+  // Query to get all student names
+  const studentNamesQuery = 'SELECT DISTINCT CONCAT(fname, " ", sname) AS fullName FROM qr_codes';
+  
+  // Execute both queries
+  db.query(uniqueDatesQuery, (err, dates) => {
+      if (err) {
+          console.error('Error fetching unique dates:', err);
+          res.status(500).send('Error fetching unique dates');
+          return;
+      }
+      
+      db.query(studentNamesQuery, (err, students) => {
+          if (err) {
+              console.error('Error fetching student names:', err);
+              res.status(500).send('Error fetching student names');
+              return;
+          }
+
+          // Construct the attendance map
+          const attendanceMap = {};
+          students.forEach(student => {
+              attendanceMap[student.fullName] = {};
+              dates.forEach(date => {
+                  attendanceMap[student.fullName][date.date] = false;
+              });
+          });
+
+          // Query to get attendance data for each student on each date
+          const attendanceQuery = 'SELECT CONCAT(fname, " ", sname) AS fullName, DATE(scanned_at) AS date, COUNT(*) > 0 AS present FROM qr_codes GROUP BY fullName, date';
+
+          db.query(attendanceQuery, (err, attendanceData) => {
+              if (err) {
+                  console.error('Error fetching attendance data:', err);
+                  res.status(500).send('Error fetching attendance data');
+                  return;
+              }
+
+              // Update the attendance map based on the fetched data
+              attendanceData.forEach(row => {
+                  attendanceMap[row.fullName][row.date] = row.present;
+              });
+
+              // Generate the CSV content based on the attendance data
+              const csvContent = generateCSVContent(students, dates, attendanceMap);
+              
+              const fileName = `attendanceGrid-${req.params.group}-${req.params.module}.csv`;
+              res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+              res.setHeader('Content-Type', 'text/csv');
+              
+              // Send the CSV content as the response
+              res.send(csvContent);
+          });
+      });
+  });
+});
+
+// Function to generate CSV content
+function generateCSVContent(students, dates, attendanceMap) {
+  let csvContent = 'Student Name,';
+  dates.forEach(date => {
+      csvContent += `${date.date.toDateString()},`;
+  });
+  csvContent += '\n';
+
+  students.forEach(student => {
+      csvContent += `${student.fullName},`;
+      dates.forEach(date => {
+          csvContent += attendanceMap[student.fullName][date.date] ? 'Present,' : 'Absent,';
+      });
+      csvContent += '\n';
+  });
+
+  return csvContent;
+}
+
+// ************* Downloads end 
+
+
 
 
 

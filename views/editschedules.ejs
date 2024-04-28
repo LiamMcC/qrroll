@@ -1,0 +1,165 @@
+<%- include('../partials/header') -%>
+      <div class="container">
+
+    <h1>Administration Of For all <%= results[0].class_name %> Modules & Classes</h1> 
+    <p>Here you can modify class modules and times. 
+      
+
+    </p>
+    
+   
+
+
+
+<div class="rcontainer">
+    <table id="updatetable">
+        <thead>
+            <tr>
+                
+                <th>Module</th>
+                <th>Day</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Remove</th>
+
+            
+
+            </tr>
+        </thead>
+        <tbody>
+            <% results.forEach(item => { %>
+                <tr>
+               
+                    <td data-module-id="<%= item.module %>"><%= item.module_name %> (<%= item.module %>)</td>
+                    <td>
+                        <select name="dayofweeke"  class="styled-select">
+                        <option value="<%= item.dayofweek %>"><%= item.dayofweek %></option>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Friday">Friday</option>
+            
+                       
+
+                        </select>
+                    </td>
+                    <td>
+                        <select name="starttime"  class="styled-select">
+                        <option value="<%= item.starttime %>"><%= item.starttime %></option>
+                        <option value="9:00">9:00</option>
+                        <option value="9:40">9:40</option>
+                        <option value="10:20">10:20</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:20">11:20</option>
+                        <option value="12:00">12:40</option>
+                        <option value="12:40">13:20</option>
+                        <option value="13:20">14:00</option>
+                        <option value="14:00">14:40</option>
+                        <option value="15:20">15:20</option>
+                       
+
+                        </select>
+                    </td>
+                    <td>
+                        <select name="endtime"  class="styled-select">
+                            <option value="<%= item.endtime %>"><%= item.endtime %></option>
+                        <option value="9:40">9:40</option>
+                        <option value="10:20">10:20</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:40">12:40</option>
+                        <option value="13:20">13:20</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:00">14:40</option>
+                        <option value="15:20">15:20</option>
+                        <option value="16:00">16:00</option>
+                       
+
+                        </select>
+                    </td>
+                    
+                    <td data-module-row_id="<%= item.id %>"><a href="/deletetimeslo/<%= item.id %>/<%= item.class_id %>">Remove This!</a></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+   
+  </div>
+  <button id="saveChangesBtn" class="button">Save Changes</button>
+  <div id="loadingIcon" style="display: none;">Loading...</div>
+  <script>
+    $(document).ready(function() {
+      $('#saveChangesBtn').on('click', function() {
+        var updates = []; // Array to store updated data
+        
+        // Iterate through each row in the table
+        $('tbody tr').each(function() {
+          var row = $(this);
+          var moduleId = row.find('td[data-module-id]').data('module-id');
+          var rowId = row.find('td[data-module-row_id]').data('module-row_id');
+          var dayOfWeek = row.find('select[name="dayofweeke"]').val(); // Get the selected day
+          var startTime = row.find('select[name="starttime"]').val(); // Get the selected start time
+          var endTime = row.find('select[name="endtime"]').val(); // Get the selected end time
+          
+          // Construct an object with the updated data for this row
+          var update = {
+            rowId : rowId,
+            moduleId: moduleId,
+            dayOfWeek: dayOfWeek,
+            startTime: startTime,
+            endTime: endTime
+          };
+          
+          updates.push(update); // Add the update to the array
+        });
+        
+        // Perform AJAX POST request to send the updates to the server
+        $.ajax({
+          type: 'POST',
+          url: '/savechanges', // Specify the server endpoint
+          data: { updates: updates }, // Pass the updates as data
+          success: function(response) {
+            // Handle success response if needed
+            console.log('Changes saved successfully:', response);
+          },
+          error: function(xhr, status, error) {
+            // Handle error response if needed
+            console.error('Failed to save changes:', error);
+          }
+        });
+      });
+
+      $(document).ready(function() {
+  $('#saveChangesBtn').on('click', function() {
+    // Show loading icon
+    $('#updatetable').hide();
+    $('#loadingIcon').show();
+    
+    // Disable the button to prevent multiple clicks
+    $(this).prop('disabled', true);
+
+    // Wait for 10 seconds before refreshing the page
+    setTimeout(function() {
+      location.reload();
+    }, 10000);
+  });
+});
+
+
+    });
+  </script>
+
+
+  <br>
+  <br>
+  
+ 
+
+ 
+   
+  
+</div>
+<%- include('../partials/footer') -%>
+</body>
+</html>

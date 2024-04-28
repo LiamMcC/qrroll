@@ -1,0 +1,52 @@
+
+
+<%- include('../partials/header') -%>
+<div class="container">
+   
+    <h1>Admin Only</h1>
+    <div class="rcontainer">
+        <div class="flex-item">
+          <div class="rheader">Generate Code</div>
+          <p style="width:80%;">Clicking here will allow you to generate a singel qr code for a single student. These can be seen in the all codes page.</p>
+          <div class="icon"><i class="fa fa-clone"></i></div>
+          <a href="/generateqr" class="button">See It</a>
+        </div>
+    
+        <div class="flex-item">
+          <div class="rheader">Generate QR Code (Multiple)</div>
+          <p style="width:80%;">Clicking here will allow you to upload a CSV file and generate multiple QR Codes in one go and email them to students</p>
+    
+          <div class="icon"><i class="fa fa-address-book-o"></i></div>
+          <a href="/generatemultipleqr" class="button">See It</a>
+    
+        </div>
+    
+       
+        <!-- Add more flex-items as needed -->
+      </div>
+
+
+      <div class="rcontainer">
+        <div class="flex-item">
+          <div class="rheader">All Users</div>
+          <p style="width:80%;">Clicking here will allow you to generate a singel qr code for a single student. These can be seen in the all codes page.</p>
+          <div class="icon"><i class="fa fa-clone"></i></div>
+          <a href="/allusers" class="button">See It</a>
+        </div>
+
+        <div class="flex-item">
+          <div class="rheader">Manage Timetable</div>
+          <p style="width:80%;">From here you can see all classes, all assocuiated modules and all timetables. These can be modified from within this section</p>
+          <div class="icon"><i class="fa fa-clone"></i></div>
+          <a href="/allclasses" class="button">See It</a>
+        </div>
+    
+
+    
+       
+        <!-- Add more flex-items as needed -->
+      </div>
+
+    </div>
+
+    <%- include('../partials/footer') -%>

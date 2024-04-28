@@ -3,16 +3,49 @@
              
 
     <h1>Generate One QR Code</h1> 
-        
+    <p>Here you can generate multiple QR Codes by uploading a CSV file. the format of this file must be the fillowing. </p>
 
-</div>
+    <div class="download-template" style="margin-bottom: 20px;">
+      <h2>Download Template</h2>
+      <p>Download the CSV template file here:</p>
+      <a href="/download/template" class="button">Download Template</a>
+  </div>
 
 
-<div class="rcontainer">
+    <table>
+      <thead>
+          <tr>
+              <th>class</th>
+              <th>studentNo</th>
+              <th>fname</th>
+              <th>sname</th>
+              <th>email</th>
+              
+          </tr>
+      </thead>
+      <tbody>
+          
+              <tr>
+                  <td>sampleClass</td>
+                  <td>12345678</td>
+                  <td>Someone</td>
+                  <td>Important</td>
+                  <td>the.email@wherever.ie</td>
+                  
+              </tr>
+         
+      </tbody>
+  </table>
+
+
+<div class="rcontainer" style="margin-top:15px;">
     <div class="flex-item" style="width:90%;">
       
         
-            <h1>Upload CSV File</h1>
+            <h1 style="color:rgb(49, 48, 48)">Upload CSV File</h1>
+            
+
+
     <form action="/generatemultipleqr" method="post" style="width:90%;"" enctype="multipart/form-data">
         <input type="file" name="csvFile" accept=".csv">
         <button type="submit">Upload</button>
@@ -23,7 +56,7 @@
   
 
 
-  
+  </div>
 
 <%- include('../partials/footer') -%>
 </body>

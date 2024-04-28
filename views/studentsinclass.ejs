@@ -6,7 +6,28 @@
 
 <h1>All Students In Class</h1> 
 
-<a href="/sendallcodes" class="button">Send Them All</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Attendance Link</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        <% result.forEach(student => { %>
+            <tr>
+                <td><%= student.fname %> <%= student.fullname %> (<%= student.studentNo %>)</td>
+                <td><a href="/overallattendance/<%= student.class %>/<%= student.studentNo %>">Click For Attendance</a></td>
+                
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+
+
+
 </div>
 
 
